@@ -24,9 +24,13 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
         'blog' => 'BlogController',
         'categories'=>'CategoryController',
         'offers'=>'OfferController',
-        'newsletter'=>'NewsletterController',
+        'newsletters'=>'NewsletterController',
         'settings'=>'SettingsController'
     ]);
+
+    Route::get('/profile','AdministratorController@myProfile')->name('administrators.profile');
+    Route::post('/profile','AdministratorController@saveProfile')->name('administrators.profile.save');
+    Route::post('/profile/password','AdministratorController@changePassword')->name('administrators.profile.password');
 
     Route::get('/','DashboardController@start')->name('dashboard.start');
 });

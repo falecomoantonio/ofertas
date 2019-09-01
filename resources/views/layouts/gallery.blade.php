@@ -21,13 +21,13 @@
     <body>
 
         <!-- Navbar and Header -->
-        <nav class="nav-extended yellow lighten-4">
-            <div class="nav-background">
-                <div class="pattern active" style="background-image: url('{{ getSuperBanner()->value }}');"></div>
+        <nav class="nav-extended">
+            <div class="nav-background" style="opacity:1">
+                <div class="pattern active" style="background-image: url('assets/images/banner.png');background-repeat: no-repeat;background-size:contain;"></div>
             </div>
 
             <div class="nav-wrapper container">
-                <a href="index.html" class="brand-logo grey-text text-darken-3"><i class="material-icons">camera</i>Gallery</a>
+                <a href="index.html" class="brand-logo grey-text text-darken-3"><i class="material-icons">camera</i>Rei das Vendas</a>
                 <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li class="active"><a class="grey-text text-darken-3" href="index.html">Gallery</a></li>
@@ -44,8 +44,8 @@
                 </ul>
 
                 <div class="nav-header center">
-                    <h1  class="grey-text text-darken-3">REI DAS VENDAS</h1>
-                    <div class="tagline grey-text text-darken-3">Ofertas do Dia</div>
+                    <h1  class="grey-text text-darken-3"> &nbsp; </h1>
+                    <div class="tagline grey-text text-darken-3">&nbsp;</div>
                 </div>
             </div>
 

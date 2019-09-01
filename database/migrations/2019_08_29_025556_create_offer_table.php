@@ -16,14 +16,17 @@ class CreateOfferTable extends Migration
         Schema::create('offers', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            $table->integer('category_id');
+            $table->integer('owner_id');
+
             $table->string('title',200);
             $table->string('banner',40);
             $table->text('content');
             $table->json('gallery');
-            $table->decimal('price',10,2);
+            $table->decimal('price',10,2)->nullable();
 
-            $table->integer('category_id');
-            $table->integer('owner_id');
+            $table->string('link',2050);
+            $table->string('code',64)->nullable();
 
             $table->timestamps();
             $table->softDeletes();

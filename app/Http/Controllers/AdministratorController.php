@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdministratorChangePassword;
+use App\Http\Requests\AdministratorSaveProfileRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdministratorController extends Controller
 {
@@ -13,7 +17,7 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        //
+        return view("dashboard.administrators.index");
     }
 
     /**
@@ -23,8 +27,48 @@ class AdministratorController extends Controller
      */
     public function create()
     {
-        //
+        return view("dashboard.administrators.create");
     }
+
+    public function myProfile()
+    {
+        return view("dashboard.administrators.profile")->with('user', Auth::user());
+    }
+
+    public function saveProfile(AdministratorSaveProfileRequest $request)
+    {
+        try {
+            Auth::user()->fill($request->all());
+            $saved = Auth::user()->save();
+            if($saved) {
+                session()->flash('DASH_MSG_SUCCESS', 'Perfil Atualizado');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível atualizar o Perfil');
+            }
+            return redirect()->route('administrators.profile');
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('administrators.profile');
+        }
+    }
+
+    public function changePassword(AdministratorChangePassword $request)
+    {
+        try {
+            Auth::user()->fill([ 'password' => Hash::make($request->get('password'))]);
+            $saved = Auth::user()->save();
+            if($saved) {
+                session()->flash('DASH_MSG_SUCCESS', 'Senha Atualizada');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível atualizar a Senha');
+            }
+            return redirect()->route('administrators.profile');
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('administrators.profile');
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -37,27 +81,6 @@ class AdministratorController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -68,7 +91,11 @@ class AdministratorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+
+        } catch (\Exception $e) {
+
+        }
     }
 
     /**
@@ -79,6 +106,10 @@ class AdministratorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+
+        } catch (\Exception $e) {
+
+        }
     }
 }
