@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User;
 use App\Http\Requests\AdministratorChangePassword;
+use App\Http\Requests\AdministratorCreateRequest;
 use App\Http\Requests\AdministratorSaveProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdministratorController extends Controller
 {
@@ -17,14 +20,10 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        return view("dashboard.administrators.index");
+        $administrators = User::paginate(10);
+        return view("dashboard.administrators.index")->with('administrators', $administrators);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view("dashboard.administrators.create");
@@ -38,7 +37,11 @@ class AdministratorController extends Controller
     public function saveProfile(AdministratorSaveProfileRequest $request)
     {
         try {
-            Auth::user()->fill($request->all());
+            Auth::user()->fill([
+                "username"=>strtolower($request->get('username')),
+                "email"=>strtolower($request->get('email')),
+                "name"=>$request->get('name')
+            ]);
             $saved = Auth::user()->save();
             if($saved) {
                 session()->flash('DASH_MSG_SUCCESS', 'Perfil Atualizado');
@@ -69,16 +72,23 @@ class AdministratorController extends Controller
         }
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(AdministratorCreateRequest $request)
     {
-        //
+        try {
+            $user = new User($request->only(["name","username","email"]));
+            $user->password = Str::random(64);
+            $saved = $user->save();
+
+            if($saved) {
+                session()->flash('DASH_MSG_SUCCESS', 'Administrador Registrado');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível registrar o Administrador');
+            }
+            return redirect()->route('administrators.index');
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('administrators.index');
+        }
     }
 
 
@@ -107,9 +117,16 @@ class AdministratorController extends Controller
     public function destroy($id)
     {
         try {
-
+            $removed = User::destroy(decrypt($id));
+            if($removed) {
+                session()->flash('DASH_MSG_SUCCESS', 'Administrador Removido');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível remover o Administrador');
+            }
+            return redirect()->route('administrators.index');
         } catch (\Exception $e) {
-
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('administrators.index');
         }
     }
 }

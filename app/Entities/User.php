@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Traits\CryptId;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -11,6 +12,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use CryptId;
 
     protected $primaryKey = 'id';
 

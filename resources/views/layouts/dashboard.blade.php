@@ -18,7 +18,7 @@
     <body class="">
 
         <div class="wrapper ">
-            <div class="sidebar" data-color="azure" data-background-color="white" data-image="{{ url("assets/img/sidebar-1.jpg") }}">
+            <div class="sidebar" data-color="azure" data-background-color="white" data-image="{{ url("assets/images/sidebar-3.jpg") }}">
                 <div class="logo">
                     <a href="{{ url("dashboard") }}" class="simple-text logo-normal">Rei das Vendas</a>
                 </div>
