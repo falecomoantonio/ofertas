@@ -90,7 +90,13 @@ class AdministratorController extends Controller
     public function destroy($id)
     {
         try {
-            $removed = User::destroy(decrypt($id));
+
+            $id = decrypt($id);
+            if(in_array($id, [env('ROOT'), Auth::id()])) {
+                throw new \Exception("Usuário Protegido");
+            }
+
+            $removed = User::destroy($id);
             if($removed) {
                 session()->flash('DASH_MSG_SUCCESS', 'Administrador Removido');
             } else {

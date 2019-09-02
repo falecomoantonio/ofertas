@@ -55,7 +55,7 @@
                     <ul class="categories container">
                         <li class="active"><a class="grey-text text-darken-3" href="#all">Tudo</a></li>
                         @foreach($categories as $cat)
-                        <li><a class="grey-text text-darken-3" href="#{{ \Illuminate\Support\Str::slug($cat->name,'_') }}">{{ ucfirst($cat->name) }}</a></li>
+                        <li><a class="grey-text text-darken-3" title="{{ $cat->description }}" href="#{{ \Illuminate\Support\Str::slug($cat->name,'_') }}">{{ ucfirst($cat->name) }}</a></li>
                         @endforeach
                     </ul>
                 </div>

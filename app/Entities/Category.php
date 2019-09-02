@@ -2,27 +2,26 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\CryptId;
 
-abstract class Category extends Model
+class Category extends CategoryBase
 {
-    use SoftDeletes;
-
-    protected $primaryKey = 'id';
-
-    protected $table = 'categories';
-
-    protected $fillable = ['name', 'description', 'parent_id'];
-
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
-    ];
+    use CryptId;
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+    }
+
+    public function super()
+    {
+        return $this->belongsTo(Category::class,'parent_id')->withDefault(function(){
+            return new Category(['name'=>'Nenhum']);
+        });
+    }
+
+    public function childrens()
+    {
+        return $this->hasMany(Category::class,'parent_id');
     }
 }

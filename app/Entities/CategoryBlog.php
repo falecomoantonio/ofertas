@@ -4,17 +4,28 @@ namespace App\Entities;
 
 use App\Scope\CategoryBlogScope;
 
-class CategoryBlog extends Category
+class CategoryBlog extends CategoryBase
 {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->parent_id = env('SUPER_CATEGORY_BLOG');
+        if(is_null($this->parent_id) || empty($this->parent_id))
+            $this->parent_id = env('SUPER_CATEGORY_BLOG');
     }
 
     public static function boot()
     {
         parent::addGlobalScope(new CategoryBlogScope());
         parent::boot();
+    }
+
+    public function super()
+    {
+        return $this->belongsTo(Category::class,'parent_id');
+    }
+
+    public function childrens()
+    {
+        return $this->hasMany(Category::class,'parent_id');
     }
 }
