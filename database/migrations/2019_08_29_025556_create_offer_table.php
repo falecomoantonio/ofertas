@@ -26,6 +26,7 @@ class CreateOfferTable extends Migration
             $table->decimal('price',10,2)->nullable();
 
             $table->string('link',2050);
+            $table->string('link_bitly',200);
             $table->string('code',64)->nullable();
 
             $table->timestamps();

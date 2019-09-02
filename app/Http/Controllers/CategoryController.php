@@ -24,7 +24,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         try {
-            $category = new Category($request->only(["name", "parent_id"]));
+            $category = new Category($request->only(["name", "parent_id","description"]));
             $saved = $category->save();
 
             if ($saved) {

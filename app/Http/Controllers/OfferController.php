@@ -2,83 +2,138 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Category;
+use App\Entities\CategoryOffer;
+use App\Entities\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Shivella\Bitly\Facade\Bitly;
 
 class OfferController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $offers = Offer::orderBy('title')->paginate(env('PAGINATE'));
+        return view('dashboard.offers.index')->with('offers', $offers);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        try {
+            $categories = CategoryOffer::all();
+            if($categories->count()==0)
+                throw new \Exception("Nenhuma categoria registrada");
+
+            return view('dashboard.offers.create')->with('categories', $categories);
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('offers.index');
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        try {
+            $offer = new Offer($request->except(["_token","gallery","banner"]));
+            $offer->owner_id = Auth::id();
+            $offer->link = $request->link;
+            $offer->link_bitly = Bitly::getUrl($request->link);
+
+            if($request->hasFile('banner')) {
+                $newNameHash = md5(Carbon::now());
+                $newName = sprintf("%s.%s", $newNameHash, $request->banner->getClientOriginalExtension());
+                $upload = $request->banner->storeAs('public/offers', $newName);
+                if($upload) {
+                    $offer->banner = $newName;
+                } else {
+                    $offer->banner = 'banner-default.png';
+                }
+            } else {
+                $offer->banner = 'banner-default.png';
+            }
+
+            if($request->hasfile('gallery'))
+            {
+                $gallery = array();
+                foreach($request->file('gallery') as $image)
+                {
+                    $newNameHash = Str::random(32);
+                    $newName = sprintf("%s.%s", $newNameHash, $image->getClientOriginalExtension());
+                    $image->storeAs('public/gallery', $newName);
+                    $gallery[] = $newName;
+                }
+
+                $offer->gallery = $gallery;
+            } else {
+                $offer->gallery = array();
+            }
+            $saved = $offer->save();
+            if ($saved) {
+                session()->flash('DASH_MSG_SUCCESS', 'Oferta Registrada');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível registrar a Oferta');
+            }
+            return redirect()->route('offers.index');
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('offers.index');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        try {
+            $offer = Offer::find(decrypt($id));
+            if(is_null($offer))
+                throw new \Exception("Oferta Não Encontrada");
+
+            return view('dashboard.offers.edit')
+                        ->with('offer', $offer)
+                        ->with('categories', CategoryOffer::all());
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('offers.index');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $offer = Offer::find(decrypt($id));
+            if(is_null($offer))
+                throw new \Exception('Oferta Não Encontrada');
+
+            $offer->fill($request->all());
+            $saved = $offer->save();
+
+            if ($saved) {
+                session()->flash('DASH_MSG_SUCCESS', 'Oferta Atualizada');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível atualizar a Oferta');
+            }
+            return redirect()->route('offers.index');
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('offers.index');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        try {
+            $removed = Offer::destroy(decrypt($id));
+            if($removed) {
+                session()->flash('DASH_MSG_SUCCESS', 'Oferta Removida');
+            } else {
+                session()->flash('DASH_MSG_ERROR', 'Não foi possível remover a Oferta');
+            }
+            return redirect()->route('offers.index');
+        } catch (\Exception $e) {
+            session()->flash('DASH_MSG_WARNING', $e->getMessage());
+            return redirect()->route('offers.index');
+        }
     }
 }

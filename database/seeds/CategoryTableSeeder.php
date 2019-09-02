@@ -12,9 +12,9 @@ class CategoryTableSeeder extends Seeder
     public function run()
     {
         $ids = [
-            [env('SUPER_CATEGORY'),'Uncategorized','Categoria Geral',null,date('Y-m-d H:i:s'),date('Y-m-d H:i:s'),null],
-            [env('SUPER_CATEGORY_BLOG'),'Blog','Categorias do Blog',null,date('Y-m-d H:i:s'),date('Y-m-d H:i:s'),null],
-            [env('SUPER_CATEGORY_OFFER'),'Ofertas','Categorias das Ofertas',null,date('Y-m-d H:i:s'),date('Y-m-d H:i:s'),null]
+            ['id'=>env('SUPER_CATEGORY'),'name'=>'Uncategorized','description'=>'Categoria Geral','parent_id'=>null,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s'),'deleted_at'=>null],
+            ['id'=>env('SUPER_CATEGORY_BLOG'),'name'=>'Blog','description'=>'Categorias do Blog','parent_id'=>env('SUPER_CATEGORY'),'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s'),'deleted_at'=>null],
+            ['id'=>env('SUPER_CATEGORY_OFFER'),'name'=>'Ofertas','description'=>'Categorias das Ofertas','parent_id'=>env('SUPER_CATEGORY'),'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s'),'deleted_at'=>null]
         ];
         foreach($ids as $id)
         {

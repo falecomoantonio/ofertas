@@ -4,9 +4,14 @@ if(!function_exists('getSuperBanner'))
 {
     function getSuperBanner()
     {
-        return \App\Entities\MetaData::where('key','=','superbanner')->firstOr(function(){
+        $banner = \App\Entities\MetaData::where('key','=','superbanner')->firstOr(function(){
             return null;
         });
+
+        if(is_null($banner))
+            return url("assets/images/banner-default.png");
+        else
+            return url("assets/images/{$banner->value}");
     }
 }
 

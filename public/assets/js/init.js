@@ -1,6 +1,6 @@
 (function($){
   $(function(){
-
+      $('.parallax').parallax();
     M.AutoInit();
 
     // Dropdown
@@ -8,6 +8,7 @@
       coverTrigger: false,
       constrainWidth: false
     });
+
 
 
     // Navbar

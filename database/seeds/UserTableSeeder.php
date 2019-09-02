@@ -12,7 +12,7 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $ids = [
-            ['Administrador','administrator','administrator@reidasvendas.com.br',null,'IS_NOT_PASSWORD',null,date('Y-m-d H:i:s'),date('Y-m-d H:i:s'),null]
+            ['id'=>env('ROOT'),'name'=>'Administrador','username'=>'administrator','email'=>'administrator@reidasvendas.com.br','email_verified_at'=>null,'password'=>'IS_NOT_PASSWORD','remember_token'=>null,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s'),'deleted_at'=>null]
         ];
         foreach($ids as $id)
         {
