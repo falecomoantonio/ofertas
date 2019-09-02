@@ -1,78 +1,53 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="pt-br">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Autenticação de Usuário - Rei das Vendas</title>
+        <!-- CORE CSS-->
+        <link href="{{ url("assets/login/materialize.css") }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ url("assets/login/style.css") }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <!-- CSS style Horizontal Nav (Layout 03)-->
+        <link href="{{ url("assets/login/style-horizontal.css") }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ url("assets/login/page-center.css") }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
+        <link href="{{ url('assets/login/prism.css') }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="{{ url("assets/login/perfect-scrollbar.css") }}" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <style>
+            body {
+                background-image: url("{{ url("assets/login/planodefundo.jpg") }}");
+                background-attachment: fixed;
+                background-size: cover;
+            }
+        </style>
+    </head>
+    <body class="cyan">
+        <!-- Start Page Loading -->
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+        </div>
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+        <div id="login-page" class="row">
+            @yield('CONTENT')
+        </div>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+        <!-- jQuery Library -->
+        <script type="text/javascript" src="{{ url("assets/login/jquery.js") }}"></script>
+        <!--materialize js-->
+        <script type="text/javascript" src="{{ url("assets/js/materialize.min.js") }}"></script>
+        <!--prism-->
+        <script type="text/javascript" src="{{ url('assets/login/prism.js') }}"></script>
+        <!--scrollbar-->
+        <script type="text/javascript" src="{{ url("assets/login/perfect-scrollbar.min.js") }}"></script>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     ">
-                                        {{ __('Logout') }}
-                                    </a>
-
-
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
-</body>
+        <!--plugins.js - Some Specific JS codes for Plugin Settings-->
+        <script type="text/javascript" src="{{ url("assets/login/plugins.js") }}"></script>
+    @yield('SCRIPT')
+    </body>
 </html>

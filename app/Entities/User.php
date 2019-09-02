@@ -33,4 +33,9 @@ class User extends Authenticatable
     {
         parent::__construct($attributes);
     }
+
+    public function getIsVerifiedAttribute()
+    {
+        return is_null($this->original['email_verified_at']);
+    }
 }

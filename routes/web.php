@@ -13,7 +13,7 @@
 
 Route::get('/', 'HomeController@showOffers')->name('homepage');
 
-Auth::routes(['register'=>false]);
+Auth::routes(['register'=>false,'verify'=>true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -28,7 +28,7 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
         'settings'=>'SettingsController'
     ]);
 
-    Route::get('/profile','AdministratorController@myProfile')->name('administrators.profile');
+    Route::get('/profile','AdministratorController@myProfile')->name('administrators.profile')->middleware('verified');
     Route::post('/profile','AdministratorController@saveProfile')->name('administrators.profile.save');
     Route::post('/profile/password','AdministratorController@changePassword')->name('administrators.profile.password');
 

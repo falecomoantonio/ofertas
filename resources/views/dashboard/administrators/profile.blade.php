@@ -3,7 +3,6 @@
 
 @endsection
 @section('CONTENT')
-
     <div class="row">
         <div class="col-lg-6">
             <div class="card">
@@ -82,7 +81,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary pull-right">Atualizar Perfil</button>
+                        <button type="submit" class="btn btn-primary pull-right">Atualizar Senha</button>
                         <div class="clearfix"></div>
                     </form>
                 </div>

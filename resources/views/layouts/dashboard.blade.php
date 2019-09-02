@@ -131,6 +131,24 @@
                             <span>{{ session('DASH_MSG_INFO') }}</span>
                         </div>
                         @endif
+                        @if(\Illuminate\Support\Facades\Auth::user()->is_verified)
+                        <div class="row">
+                            <div class="col-lg-12">
+                            @if(session('resent'))
+                            <div class="alert alert-success">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="material-icons">close</i>
+                                </button>
+                                <span>Enviamos um mensagem para o email <strong>{{ \Illuminate\Support\Facades\Auth::user()->email }}</strong></span>
+                            </div>
+                            @else
+                                <div class="alert alert-warning">
+                                    <span><a href="{{ route('verification.resend') }}"><strong>Clique aqui</strong></a> para Verificar seu endereço de email.</span>
+                                </div>
+                            @endif
+                            </div>
+                        </div>
+                        @endif
 
                         @yield('CONTENT')
                     </div>

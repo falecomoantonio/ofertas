@@ -13,14 +13,9 @@ use Illuminate\Support\Str;
 
 class AdministratorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $administrators = User::paginate(10);
+        $administrators = User::paginate(env('PAGINATE'));
         return view("dashboard.administrators.index")->with('administrators', $administrators);
     }
 
@@ -61,6 +56,7 @@ class AdministratorController extends Controller
             Auth::user()->fill([ 'password' => Hash::make($request->get('password'))]);
             $saved = Auth::user()->save();
             if($saved) {
+                Auth::logoutOtherDevices($request->get('password'));
                 session()->flash('DASH_MSG_SUCCESS', 'Senha Atualizada');
             } else {
                 session()->flash('DASH_MSG_ERROR', 'Não foi possível atualizar a Senha');
@@ -91,29 +87,6 @@ class AdministratorController extends Controller
         }
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        try {
-
-        } catch (\Exception $e) {
-
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         try {
