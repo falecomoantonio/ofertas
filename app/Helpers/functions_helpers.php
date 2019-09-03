@@ -1,5 +1,17 @@
 <?php
 
+if(!function_exists('OneSignalCreate'))
+{
+    function OneSignalCreate()
+    {
+        return new \Berkayk\OneSignal\OneSignalClient(
+            env('ONESIGNAL_APP_ID'),
+            env('ONESIGNAL_API_KEY'),
+            env('ONESIGNAL_AUTH_KEY')
+        );
+    }
+}
+
 if(!function_exists('getSuperBanner'))
 {
     function getSuperBanner()

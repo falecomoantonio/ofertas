@@ -2,39 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Newsletter;
 use Illuminate\Http\Request;
 
 class NewsletterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        try {
+            if(Newsletter::where('email','=', $request->email)->count()>0)
+                return response()->json(['status'=>0]);
+
+            $newsletter = new Newsletter();
+            $newsletter->fill($request->only(["name","email"]));
+            $newsletter->save();
+            return response()->json(['status'=>1]);
+        } catch (\Exception $e) {
+            return response()->json(['status'=>-1]);
+        }
     }
 
     /**

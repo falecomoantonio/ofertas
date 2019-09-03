@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/', 'HomeController@showOffers')->name('homepage');
 
 Auth::routes(['register'=>false,'verify'=>true]);
@@ -24,9 +25,10 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
         'blog' => 'BlogController',
         'categories'=>'CategoryController',
         'offers'=>'OfferController',
-        'newsletters'=>'NewsletterController',
         'settings'=>'SettingsController'
     ]);
+
+    Route::resource('newsletters',NewsletterController::class,['exception'=>['update','show','create']]);
 
     Route::get('/profile','AdministratorController@myProfile')->name('administrators.profile')->middleware('verified');
     Route::post('/profile','AdministratorController@saveProfile')->name('administrators.profile.save');
@@ -34,3 +36,5 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
 
     Route::get('/','DashboardController@start')->name('dashboard.start');
 });
+
+

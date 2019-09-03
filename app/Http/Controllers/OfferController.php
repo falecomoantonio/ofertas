@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Entities\Category;
 use App\Entities\CategoryOffer;
 use App\Entities\Offer;
+use Berkayk\OneSignal\OneSignalClient;
+use Berkayk\OneSignal\OneSignalFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -106,10 +108,19 @@ class OfferController extends Controller
             if(is_null($offer))
                 throw new \Exception('Oferta Não Encontrada');
 
+            $notify = $offer->price > $request->price;
+            $oldPrice = $offer->price;
+            $newPrice = $request->price;
+
             $offer->fill($request->all());
             $saved = $offer->save();
 
             if ($saved) {
+                if($notify) {
+                    $message = sprintf("Oferta exclusiva, o {$offer->title} baixou o preço, antes custava R$ {$oldPrice} e agora está por R$ {$newPrice}.");
+                    $onesignal = OneSignalCreate();
+                    $onesignal->sendNotificationToAll($message,$url = $offer->link,$data = null,$buttons = null,$schedule = null);
+                }
                 session()->flash('DASH_MSG_SUCCESS', 'Oferta Atualizada');
             } else {
                 session()->flash('DASH_MSG_ERROR', 'Não foi possível atualizar a Oferta');

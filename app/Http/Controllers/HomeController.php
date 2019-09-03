@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function showOffers()
     {
         return view('blog.onepage')
-                        ->with('offers', Offer::all())
+                        ->with('offers', Offer::paginate(24))
                         ->with('categories', CategoryOffer::all());
     }
 }
