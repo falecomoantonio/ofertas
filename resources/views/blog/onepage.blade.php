@@ -73,6 +73,13 @@
             <h4>Ainda não publicamos nenhuma oferta!</h4>
         @endif
     </div>
+    <div class="row">
+        <p class="text-center">
+        @if($offers->count()>0)
+            {!! $offers->links("components.paginate") !!}
+        @endif
+        </p>
+    </div>
 @endsection
 @section('SCRIPT')
 @endsection

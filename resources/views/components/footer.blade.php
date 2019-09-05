@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col l5 s12">
-                @component('components.default_widget',['title'=>'Quem Somos','content'=>'Algum texto aqui'])
+                @component('components.default_widget',['title'=>'Quem Somos','content'=>'Não temos loja física, somos 100% on-line e recebemos diariamente as  melhores ofertas e cupons de descontos exclusivos das melhores lojas virtuais do Brasil. Muitas ofertas anunciada você não vai encontrar diretamente no site, somente conosco, compre com nossa indicação e garanta a nosso suporte até o recebimento do seu produto.'])
                 @endcomponent
             </div>
             <div class="col l3 s12">
