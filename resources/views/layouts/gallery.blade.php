@@ -17,6 +17,23 @@
         <!-- Material Icons -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
+
+        <meta name="description" content="Os melhores preços do Sertão Central você encontra aqui" />
+        <meta itemprop="name" content="Ofertas do Rei das Vendas" />
+        <meta itemprop="description" content="Os melhores preços do Sertão Central você encontra aqui">
+        <meta itemprop="image" content="">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Ofertas do Rei das Vendas">
+        <meta name="twitter:description" content="Os melhores preços do Sertão Central você encontra aqui">
+        <meta name="twitter:image" content="">
+        <link href="" rel="image_src" />
+        <meta property="og:title" content="Ofertas do Rei das Vendas" />
+        <meta property="og:image" content="" />
+        <meta property="og:description" content="Os melhores preços do Sertão Central você encontra aqui" />
+        <meta property="og:site_name" content="Ofertas do Rei das Vendas" />
+        <meta property="article:tag" content="Ofertas, Celular, Smartphone, IPhone, Smarttv, perfume importado, perfume, natura, boticário, preço bom, barato" />
+
+
         @yield('STYLE')
 
     </head>
@@ -35,6 +52,7 @@
                 <div class="categories-container">
                     <ul class="categories container">
                         <li class="active"><a class="grey-text text-darken-3" href="#all">Tudo</a></li>
+                        <li class="active"><a class="grey-text text-darken-3" href="#promo">Em Promoção</a></li>
                         @foreach($categories as $cat)
                         <li><a class="grey-text text-darken-3" title="{{ $cat->description }}" href="#{{ \Illuminate\Support\Str::slug($cat->name,'_') }}">{{ ucfirst($cat->name) }}</a></li>
                         @endforeach

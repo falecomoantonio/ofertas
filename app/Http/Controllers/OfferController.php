@@ -10,6 +10,7 @@ use Berkayk\OneSignal\OneSignalFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Shivella\Bitly\Facade\Bitly;
 
@@ -19,6 +20,18 @@ class OfferController extends Controller
     {
         $offers = Offer::orderBy('title')->paginate(env('PAGINATE'));
         return view('dashboard.offers.index')->with('offers', $offers);
+    }
+
+    public function index2alter()
+    {
+        $offers = Offer::orderBy('id')->paginate(env('PAGINATE') * 10);
+        return view('dashboard.offers.index2alter')->with('offers', $offers);
+    }
+
+    public function show($id = null)
+    {
+        $offers = Offer::orderBy('id')->paginate(env('PAGINATE') * 10);
+        return view('dashboard.offers.index2alter')->with('offers', $offers);
     }
 
     public function create()
@@ -98,6 +111,28 @@ class OfferController extends Controller
         } catch (\Exception $e) {
             session()->flash('DASH_MSG_WARNING', $e->getMessage());
             return redirect()->route('offers.index');
+        }
+    }
+
+    public function updatePrice(Request $request)
+    {
+        try {
+
+            $offer = Offer::find(decrypt($request->offer));
+
+            $oldPrice = $offer->price;
+            $offer->price = $request->price;
+            $offer->promo = ($request->price < $oldPrice);
+
+            $saved = $offer->save();
+            if($saved) {
+                return response()->json(['status'=>true,'message'=>'Preço Atualizado']);
+            } else {
+                return response()->json(['status'=>false,'message'=>'Não foi possível atualizar o preço']);
+            }
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
     }
 

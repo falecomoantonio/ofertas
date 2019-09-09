@@ -9,6 +9,7 @@
                 <h4 class="card-title ">Lista de Ofertas</h4>
                 <p class="card-category" style="float:left;"> Você pode apenas remover, não é possível realizar modificações em seus dados pessoais</p>
                 <p style="float:right;margin-top:-20px;">
+                    <a href="{{ route('offers.changeprice') }}" class="btn btn-info btn-sm">Atualizar Preços</a>
                     <a href="{{ route('offers.create') }}" class="btn btn-warning btn-sm">Adicionar</a>
                 </p>
             </div>
@@ -33,7 +34,7 @@
                                     {{ $o->title }} <br />
                                     <small><a href="#" value="{{ $o->link_bitly }}" role="button" class="btnCopy" data-link="{{ $o->link_bitly }}"><i class="material-icons">link</i> Bitly</a></small>
                                 </td>
-                                <td>{{ $o->category->name }}</td>
+                                <td>{{ (is_null($o->category) ? 'NÃO DEFINIDO' : $o->category->name) }}</td>
                                 <td>{{ $o->owner->name }}</td>
                                 <td>
                                     <a href="{{ route("offers.edit", ["id"=>$o->crypt_id]) }}" class="btn btn-warning btn-block btn-sm">Editar</a>

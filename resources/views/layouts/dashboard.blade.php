@@ -196,6 +196,13 @@
         <script type="text/javascript" src="{{ url("assets/js/plugins/bootstrap-notify.js") }}"></script>
         <script src="{{ url("assets/js/material-dashboard.js?v=2.1.1") }}" type="text/javascript"></script>
         <script type="text/javascript">
+            $(function(){
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+            });
             $(document).ready(function() {
 
                 $().ready(function() {

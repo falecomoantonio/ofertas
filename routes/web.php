@@ -28,6 +28,10 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
         'settings'=>'SettingsController'
     ]);
 
+    Route::resource('offers',OfferController::class);
+    Route::get('offers/change/price','OfferController@index2alter')->name('offers.changeprice');
+    Route::put('offers/change/price','OfferController@updatePrice')->name('offers.change.price');
+
     Route::resource('newsletters',NewsletterController::class,['exception'=>['update','show','create']]);
 
     Route::get('/profile','AdministratorController@myProfile')->name('administrators.profile')->middleware('verified');

@@ -12,6 +12,18 @@ if(!function_exists('OneSignalCreate'))
     }
 }
 
+if(!function_exists('getValue'))
+{
+    function getValue($key)
+    {
+        $obj = keyValue($key);
+        if(is_null($obj))
+            return null;
+
+        return $obj->value;
+    }
+}
+
 if(!function_exists('getSuperBanner'))
 {
     function getSuperBanner()

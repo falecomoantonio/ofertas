@@ -25,6 +25,8 @@ class CreateOfferTable extends Migration
             $table->json('gallery');
             $table->decimal('price',10,2)->nullable();
 
+            $table->boolean('promo')->default(false);
+
             $table->string('link',2050);
             $table->string('link_bitly',200);
             $table->string('code',64)->nullable();

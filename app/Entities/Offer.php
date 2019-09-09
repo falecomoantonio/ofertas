@@ -34,6 +34,9 @@ class Offer extends Model
         return $this->belongsTo(CategoryOffer::class,'category_id');
     }
 
+    public function getBitlyAttribute(){
+        return $this->link_bitly;
+    }
 
     public function owner()
     {
