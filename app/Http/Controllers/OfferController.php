@@ -131,7 +131,6 @@ class OfferController extends Controller
                 return response()->json(['status'=>false,'message'=>'Não foi possível atualizar o preço']);
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
     }

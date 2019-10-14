@@ -12,6 +12,10 @@ class CheckForMaintenanceMode extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        "login",
+        "logout",
+        "dashboard",
+        "dashboard/*",
+        "api/*"
     ];
 }

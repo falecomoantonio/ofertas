@@ -16,11 +16,15 @@ if(!function_exists('getValue'))
 {
     function getValue($key)
     {
-        $obj = keyValue($key);
-        if(is_null($obj))
-            return null;
-
-        return $obj->value;
+        if(\Illuminate\Support\Facades\Cache::has($key)) {
+            return \Illuminate\Support\Facades\Cache::get($key);
+        } else {
+            $obj = keyValue($key);
+            if(is_null($obj))
+                return null;
+            \Illuminate\Support\Facades\Cache::put($key, $obj->value,30);
+            return $obj->value;
+        }
     }
 }
 
@@ -35,7 +39,7 @@ if(!function_exists('getSuperBanner'))
         if(is_null($banner))
             return url("assets/images/banner-default.png");
         else
-            return url("assets/images/{$banner->value}");
+            return url("storage/banner/{$banner->value}");
     }
 }
 
@@ -43,9 +47,7 @@ if(!function_exists('keyValue'))
 {
     function keyValue($key)
     {
-        return \App\Entities\MetaData::where('key','=',$key)->firstOr(function(){
-            return null;
-        });
+        return \App\Entities\MetaData::find($key);
     }
 }
 

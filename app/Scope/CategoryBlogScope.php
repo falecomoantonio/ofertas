@@ -18,6 +18,6 @@ class CategoryBlogScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('parent_id','=',env('SUPER_CATEGORY_BLOG'));
+        $builder->where('parent_id','=',-1);
     }
 }

@@ -10,7 +10,7 @@ class CategoryBlog extends CategoryBase
     {
         parent::__construct($attributes);
         if(is_null($this->parent_id) || empty($this->parent_id))
-            $this->parent_id = env('SUPER_CATEGORY_BLOG');
+            $this->parent_id = -1;
     }
 
     public static function boot()

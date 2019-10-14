@@ -18,6 +18,6 @@ class CategoryOfferScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('parent_id','=',env('SUPER_CATEGORY_OFFER'));
+        $builder->where('parent_id','=',-2);
     }
 }

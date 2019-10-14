@@ -1,4 +1,4 @@
-@extends('layouts.gallery',['blog'=>false])
+@extends('layouts.gallery',['blog'=>true])
 @section('STYLE')
     <link type="text/css" rel="stylesheet" href="{{ url("assets/css/onepage.css") }}" />
 @endsection
@@ -11,41 +11,42 @@
         </div>
     </div>
     <div class="gallery row">
-        @if($offers->count()>0)
-            @foreach($offers as $offer)
-                <div class="col l4 m6 s12 gallery-item gallery-expand gallery-filter {{ ($offer->promo ? 'promo' : \Illuminate\Support\Str::slug($offer->category->name,'_')) }}">
+        @if($collection->count()>0)
+            @foreach($collection as $entity)
+                <div class="col l4 m6 s12 gallery-item gallery-expand gallery-filter {{ ($entity->promo ? 'promo' : \Illuminate\Support\Str::slug($entity->category->name,'_')) }}">
 
                     <div class="gallery-curve-wrapper">
-                        @if($offer->promo)
+                        @if($entity->promo)
                         <div class="ribbon"><span>PROMO</span></div>
                         @endif
                         <a class="gallery-cover gray">
-                            <img class="responsive-img" src="{{ url("storage/offers/{$offer->banner}") }}?0" alt="placeholder">
+                            <img class="responsive-img" src="{{ url("storage/offers/{$entity->banner}") }}?0" alt="placeholder">
                         </a>
 
                         <div class="gallery-header">
                             <p>
-                                <span><h5 class="center-align">{{ $offer->title }}</h5></span>
+                                <span><h5 class="center-align">{{ $entity->title }}</h5></span>
                             </p>
                             <p class="text-center">
-                                <span><h6 class="center-align" title="Consulte o Frete, preço válido até {{ $offer->created_at->addDays(1)->format('d/m/Y') }}">R$ {{ number_format($offer->price,2,',','.') }}</h6></span>
+                                <span><h6 class="center-align" title="Consulte o Frete, preço válido até {{ $entity->created_at->addDays(1)->format('d/m/Y') }}">R$ {{ number_format($entity->price,2,',','.') }}</h6></span>
                             </p>
                             <p class="center-align">
-                                <span><a href="{{ $offer->link }}" target="_blank" class="waves-effect btn-small waves-light btn green accent-4">Comprar</a></span>
+                                <span><a href="{{ $entity->link }}" target="_blank" class="waves-effect btn-small waves-light btn green accent-4">Comprar</a></span>
+                                <span><a href="https://api.whatsapp.com/send?phone=558899272210&text=Olá, gostaria de saber mais sobre o produto {{ $entity->id }} ( {{ $entity->bitly }} )" target="_blank" class="waves-effect btn-small waves-light btn amber accent-4">Perguntar</a></span>
                             </p>
                         </div>
                         <div class="gallery-body">
                             <div class="title-wrapper">
-                                <h3>{{ $offer->title }}</h3>
-                                <span class="price">R$ {{ number_format($offer->price,2,',','.') }}</span>
+                                <h3>{{ $entity->title }}</h3>
+                                <span class="price">R$ {{ number_format($entity->price,2,',','.') }}</span>
                             </div>
                             <p class="description">
-                                {!! $offer->content !!}
+                                {!! $entity->content !!}
                             </p>
 
                             <div class="carousel-wrapper">
                                 <div class="carousel">
-                                    @foreach($offer->gallery as $key => $g)
+                                    @foreach($entity->gallery as $key => $g)
                                         <a class="carousel-item" href="#{{ getNumberName($key+1)  }}!"><img src="{{ url("storage/gallery/{$g}") }}"></a>
                                     @endforeach
                                 </div>
@@ -63,8 +64,8 @@
     </div>
     <div class="row">
         <p class="text-center">
-        @if($offers->count()>0)
-            {!! $offers->links("components.paginate") !!}
+        @if($collection->count()>0)
+            {!! $collection->links("components.paginate") !!}
         @endif
         </p>
     </div>

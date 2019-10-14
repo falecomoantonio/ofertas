@@ -67,7 +67,7 @@
                 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
                     <div class="container-fluid">
                         <div class="navbar-wrapper">
-                            <a class="navbar-brand" href="#pablo">Dashboard</a>
+                            <a class="navbar-brand" href="#pablo">Dashboard - <span id="statusPlataforma" style="display: none;" class="btn btn-sm"></span></a>
                         </div>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="sr-only">Toggle navigation</span>
@@ -158,9 +158,9 @@
                     <div class="container-fluid">
                         <nav class="float-left">
                             <ul>
-                                <li><a href="#">Manutenção</a></li>
-                                <li><a href="#">Limpar Cache</a></li>
-                                <li><a href="#"> Ajuda</a></li>
+                                <li><a href="#" id="btnMaintenanceMode" role="button">Manutenção</a></li>
+                                <li><a href="#" id="btnClearCache" role="button">Limpar Cache</a></li>
+                                <li><a href="#" role="button">Ajuda</a></li>
                             </ul>
                         </nav>
                         <div class="copyright float-right">
@@ -196,13 +196,165 @@
         <script type="text/javascript" src="{{ url("assets/js/plugins/bootstrap-notify.js") }}"></script>
         <script src="{{ url("assets/js/material-dashboard.js?v=2.1.1") }}" type="text/javascript"></script>
         <script type="text/javascript">
-            $(function(){
+            $(function() {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 });
-            });
+
+                async function CheckIfIsMaintenanceMode() {
+                    return new Promise(resolve => {
+                        $.ajax({
+                            url: '{{ route("api.check.maintenance") }}',
+                            method: 'post',
+                            success: function (response) {
+                                if (response.status) {
+                                    resolve(response.status);
+                                } else {
+                                    resolve(false);
+                                }
+                            },
+                            error: function (response) {
+                                resolve(false);
+                            }
+                        });
+                    });
+                }
+
+                async function ClearCache() {
+                    return new Promise(resolve => {
+                        $.ajax({
+                            url: '{{ route("api.clear.cache") }}',
+                            method: 'post',
+                            success: function (response) {
+                                if (response.status) {
+                                    resolve(response.status);
+                                } else {
+                                    resolve(false);
+                                }
+                            },
+                            error: function (response) {
+                                resolve(false);
+                            }
+                        });
+                    });
+                }
+
+                async function EnableMaintenanceMode() {
+                    return new Promise(resolve => {
+                        $.ajax({
+                            url: '{{ route("api.up.maintenance") }}',
+                            method: 'post',
+                            success: function (response) {
+                                if (response.status) {
+                                    resolve(response.status);
+                                } else {
+                                    resolve(false);
+                                }
+                            },
+                            error: function (response) {
+                                resolve(false);
+                            }
+                        });
+                    });
+                }
+
+
+                async function DisabledMaintenanceMode() {
+                    return new Promise(resolve => {
+                        $.ajax({
+                            url: '{{ route("api.down.maintenance") }}',
+                            method: 'post',
+                            success: function (response) {
+                                if (response.status) {
+                                    resolve(response.status);
+                                } else {
+                                    resolve(false);
+                                }
+                            },
+                            error: function (response) {
+                                resolve(false);
+                            }
+                        });
+                    });
+                }
+
+                function changeStatusPlataforma(text, removeClass, addClass) {
+                    $("#statusPlataforma").html(text);
+                    $("#statusPlataforma").removeClass(removeClass);
+                    $("#statusPlataforma").addClass(addClass);
+                    $('#statusPlataforma').show();
+                }
+
+
+                setInterval(function () {
+                    CheckIfIsMaintenanceMode().then(function (status) {
+                        if (status) {
+                            changeStatusPlataforma("Em Manutenção", "btn-primary", "btn-warning");
+                        } else {
+                            changeStatusPlataforma("Em Produção", "btn-warning", "btn-primary");
+                        }
+                    }).catch(function (e) {
+
+                    });
+                }, 2000);
+
+                $('#btnMaintenanceMode').click(function () {
+                    CheckIfIsMaintenanceMode()
+                        .then(function (status) {
+                            if (status) {
+                                Swal.fire({
+                                    title: 'Atenção',
+                                    text: "Colocar a plataforma em Produção?",
+                                    type: 'success',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'UP',
+                                    cancelButtonText: 'Cancelar'
+                                }).then((result) => {
+                                    EnableMaintenanceMode().then(function (response) {
+                                    }).catch(function () {
+                                    });
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Atenção',
+                                    text: "Colocar a plataforma em Manutenção?",
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Down',
+                                    cancelButtonText: 'Cancelar'
+                                }).then((result) => {
+                                    DisabledMaintenanceMode().then(function (response) {
+                                    }).catch(function () {
+                                    });
+                                });
+                            }
+                        })
+                        .catch(function () {
+                            alert('Não foi possível checar o status da plataforma');
+                        });
+                });
+
+                $('#btnClearCache').click(function () {
+                    ClearCache()
+                        .then(function(status){
+                            if (status) {
+                                Swal.fire('Cache limpo', 'Removemos o cache da plataforma', 'success');
+                            } else {
+                                Swal.fire('Atenção', 'Ocorreu um erro ao tentar remover o cache da plataforma', 'danger');
+                            }
+                        })
+                        .catch(function (status) {
+                            Swal.fire('Atenção', 'Ocorreu um erro ao tentar remover o cache da plataforma', 'danger');
+                        });
+                }); // btnClearCache Click
+            }); // jQuery Close
+
             $(document).ready(function() {
 
                 $().ready(function() {

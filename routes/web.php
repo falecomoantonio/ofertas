@@ -13,6 +13,7 @@
 
 
 Route::get('/', 'HomeController@showOffers')->name('homepage');
+Route::get('/blog', 'HomeController@blog')->name('blog');
 
 Auth::routes(['register'=>false,'verify'=>true]);
 
@@ -25,14 +26,21 @@ Route::group(['prefix'=>'dashboard','middleware'=>'auth'],function(){
         'blog' => 'BlogController',
         'categories'=>'CategoryController',
         'offers'=>'OfferController',
-        'settings'=>'SettingsController'
     ]);
 
     Route::resource('offers',OfferController::class);
+
+    Route::get('settings','SettingsController@index')->name('settings.index');
+    Route::post('settings/metadata/change','SettingsController@changeKeyValue')->name('settings.changemetadata');
+    Route::post('settings/metadata/change1','SettingsController@frm1KeyValue')->name('settings.changemetadata1');
+    Route::post('settings/metadata/change2','SettingsController@frm2KeyValue')->name('settings.changemetadata2');
+    Route::post('settings/banner','SettingsController@changeBannerApplication')->name('settings.changebanner');
+
     Route::get('offers/change/price','OfferController@index2alter')->name('offers.changeprice');
     Route::put('offers/change/price','OfferController@updatePrice')->name('offers.change.price');
 
     Route::resource('newsletters',NewsletterController::class,['exception'=>['update','show','create']]);
+
 
     Route::get('/profile','AdministratorController@myProfile')->name('administrators.profile')->middleware('verified');
     Route::post('/profile','AdministratorController@saveProfile')->name('administrators.profile.save');

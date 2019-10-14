@@ -2,8 +2,8 @@
 <script type="text/javascript">
     (function () {
         var options = {
-            facebook: "1951344745095008", // Facebook page ID
-            whatsapp: "+5588999272210", // WhatsApp number
+            facebook: "{{ getValue('facebook_id') }}", // Facebook page ID
+            whatsapp: "{{ getValue('whatsapp_number') }}", // WhatsApp number
             call_to_action: "Fale Conosco", // Call to action
             button_color: "#FF6550", // Color of button
             position: "left", // Position may be 'right' or 'left'

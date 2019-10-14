@@ -10,7 +10,7 @@ class CategoryOffer extends CategoryBase
     {
         parent::__construct($attributes);
         if(is_null($this->parent_id) || empty($this->parent_id))
-            $this->parent_id = env('SUPER_CATEGORY_OFFER');
+            $this->parent_id = -2;
     }
 
     public static function boot()
